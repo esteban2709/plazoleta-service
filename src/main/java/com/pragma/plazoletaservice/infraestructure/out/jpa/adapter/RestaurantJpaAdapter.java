@@ -7,6 +7,7 @@ import com.pragma.plazoletaservice.infraestructure.out.jpa.entity.RestaurantEnti
 import com.pragma.plazoletaservice.infraestructure.out.jpa.mapper.IRestaurantEntityMapper;
 import com.pragma.plazoletaservice.infraestructure.out.jpa.repository.IRestaurantRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -30,6 +31,15 @@ private final IRestaurantEntityMapper restaurantEntityMapper;
     @Override
     public List<Restaurant> findAllRestaurants() {
         List<RestaurantEntity> entityList = restaurantRepository.findAll();
+        if (entityList.isEmpty()) {
+            throw new NoDataFoundException();
+        }
+        return restaurantEntityMapper.toRestaurants(entityList);
+    }
+
+    @Override
+    public List<Restaurant> findAllRestaurants(Pageable pageable) {
+        List<RestaurantEntity> entityList = restaurantRepository.findAll(pageable).getContent();
         if (entityList.isEmpty()) {
             throw new NoDataFoundException();
         }

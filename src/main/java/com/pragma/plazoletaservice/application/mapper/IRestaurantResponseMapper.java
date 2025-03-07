@@ -1,5 +1,6 @@
 package com.pragma.plazoletaservice.application.mapper;
 
+import com.pragma.plazoletaservice.application.dto.response.RestaurantClientResponseDto;
 import com.pragma.plazoletaservice.application.dto.response.RestaurantResponseDto;
 import com.pragma.plazoletaservice.domain.model.Restaurant;
 import org.mapstruct.Mapper;
@@ -15,6 +16,8 @@ public interface IRestaurantResponseMapper {
 
     @Mapping(target = "ownerId", source = "ownerId")
     RestaurantResponseDto toResponse(Restaurant restaurant);
+
+    List<RestaurantClientResponseDto> toResponseClientList(List<Restaurant> restaurants);
 
     List<RestaurantResponseDto> toResponseList(List<Restaurant> restaurants);
 }

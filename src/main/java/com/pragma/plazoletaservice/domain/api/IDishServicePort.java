@@ -1,6 +1,7 @@
 package com.pragma.plazoletaservice.domain.api;
 
 import com.pragma.plazoletaservice.domain.model.Dish;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface IDishServicePort {
     void deleteDish(Long id);
 
     List<Dish> findAllDishes();
+
+    List<Dish> findAllDishesByRestaurantId(Long restaurantId, Long categoryId, Pageable pageable);
 }

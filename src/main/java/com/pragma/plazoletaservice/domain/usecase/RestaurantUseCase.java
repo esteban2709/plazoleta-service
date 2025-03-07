@@ -8,6 +8,7 @@ import com.pragma.plazoletaservice.domain.model.Restaurant;
 import com.pragma.plazoletaservice.domain.model.User;
 import com.pragma.plazoletaservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.plazoletaservice.domain.spi.IUserClientPort;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -55,6 +56,11 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     @Override
     public List<Restaurant> findAllRestaurants() {
         return restaurantPersistencePort.findAllRestaurants();
+    }
+
+    @Override
+    public List<Restaurant> findAllRestaurants(Pageable pageable) {
+        return restaurantPersistencePort.findAllRestaurants(pageable);
     }
 
     @Override

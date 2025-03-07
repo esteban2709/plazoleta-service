@@ -7,6 +7,7 @@ import com.pragma.plazoletaservice.infraestructure.out.jpa.entity.DishEntity;
 import com.pragma.plazoletaservice.infraestructure.out.jpa.mapper.IDishEntityMapper;
 import com.pragma.plazoletaservice.infraestructure.out.jpa.repository.IDishRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -39,5 +40,19 @@ public class DishJpaAdapter implements IDishPersistencePort {
     @Override
     public void deleteDish(Long id) {
         dishRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Dish> findAllDishesByRestaurantId(Long restaurantId, Long categoryId, Pageable pageable) {
+        List<DishEntity> entityList = null;
+        if (categoryId == null) {
+            entityList = dishRepository.findAllByRestaurantId(restaurantId, pageable).getContent();
+        }else{
+            entityList = dishRepository.findAllByRestaurantIdAndCategoryId(restaurantId, categoryId, pageable).getContent();
+        }
+        if (entityList.isEmpty()) {
+            throw new NoDataFoundException();
+        }
+        return dishEntityMapper.toDishList(entityList);
     }
 }

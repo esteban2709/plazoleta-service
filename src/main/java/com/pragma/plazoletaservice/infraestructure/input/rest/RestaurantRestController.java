@@ -1,8 +1,10 @@
 package com.pragma.plazoletaservice.infraestructure.input.rest;
 
 import com.pragma.plazoletaservice.application.dto.request.RestaurantRequestDto;
+import com.pragma.plazoletaservice.application.dto.response.RestaurantClientResponseDto;
 import com.pragma.plazoletaservice.application.dto.response.RestaurantResponseDto;
 import com.pragma.plazoletaservice.application.handler.IRestaurantHandler;
+import com.pragma.plazoletaservice.domain.model.Restaurant;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,8 +47,8 @@ public class RestaurantRestController {
             @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
     })
     @GetMapping("/")
-    public ResponseEntity<List> findAllRestaurants() {
-        return ResponseEntity.ok(restaurantHandler.findAllRestaurants());
+    public ResponseEntity<List<RestaurantClientResponseDto>> findAllRestaurants(Pageable pageable) {
+        return ResponseEntity.ok(restaurantHandler.findAllRestaurants(pageable));
     }
 
     @Operation(summary = "Get restaurant by id")

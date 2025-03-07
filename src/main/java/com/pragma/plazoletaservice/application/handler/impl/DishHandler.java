@@ -9,6 +9,7 @@ import com.pragma.plazoletaservice.domain.api.IDishServicePort;
 import com.pragma.plazoletaservice.domain.model.Dish;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,5 +52,10 @@ public class DishHandler implements IDishHandler {
     @Override
     public List<DishResponseDto> findAllDishes() {
         return dishResponseMapper.toResponseList(dishServicePort.findAllDishes());
+    }
+
+    @Override
+    public List<DishResponseDto> findAllDishesByRestaurantId(Long restaurantId, Long categoryId, Pageable pageable) {
+        return dishResponseMapper.toResponseList(dishServicePort.findAllDishesByRestaurantId(restaurantId, categoryId, pageable));
     }
 }

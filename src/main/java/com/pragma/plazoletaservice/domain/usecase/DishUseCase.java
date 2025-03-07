@@ -9,6 +9,7 @@ import com.pragma.plazoletaservice.domain.spi.ICategoryPersistencePort;
 import com.pragma.plazoletaservice.domain.spi.IDishPersistencePort;
 import com.pragma.plazoletaservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.plazoletaservice.domain.spi.ITokenUtilsPort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -94,5 +95,10 @@ public class DishUseCase implements IDishServicePort {
     @Override
     public List<Dish> findAllDishes() {
         return dishPersistencePort.findAllDishes();
+    }
+
+    @Override
+    public List<Dish> findAllDishesByRestaurantId(Long restaurantId, Long categoryId, Pageable pageable) {
+        return dishPersistencePort.findAllDishesByRestaurantId(restaurantId, categoryId, pageable);
     }
 }

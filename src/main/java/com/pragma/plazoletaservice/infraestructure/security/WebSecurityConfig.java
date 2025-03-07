@@ -25,7 +25,7 @@ public class WebSecurityConfig {
                                 "/webjars/**").permitAll()
 
                         .requestMatchers( "/api/v1/restaurants/", "/api/v1/restaurants/**").hasAnyAuthority("ADMIN", "OWNER")
-                        .requestMatchers( "/api/v1/dishes/", "/api/v1/dishes/**").hasAuthority("OWNER")
+                        .requestMatchers( "/api/v1/dishes/", "/api/v1/dishes/**").hasAnyAuthority("CLIENT", "OWNER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

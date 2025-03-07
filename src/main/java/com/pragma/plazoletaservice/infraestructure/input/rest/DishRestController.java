@@ -2,9 +2,7 @@ package com.pragma.plazoletaservice.infraestructure.input.rest;
 
 import com.pragma.plazoletaservice.application.dto.request.DishRequestDto;
 import com.pragma.plazoletaservice.application.dto.response.DishResponseDto;
-import com.pragma.plazoletaservice.application.dto.response.RestaurantResponseDto;
 import com.pragma.plazoletaservice.application.handler.IDishHandler;
-import com.pragma.plazoletaservice.infraestructure.out.jpa.entity.DishEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -44,8 +43,32 @@ public class DishRestController {
             @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
     })
     @GetMapping("/")
-    public ResponseEntity<List<DishResponseDto>> getAllDishes() {
+    public ResponseEntity<List<DishResponseDto>> getAllDishes(Pageable pageable) {
         return ResponseEntity.ok(dishHandler.findAllDishes());
+    }
+
+    @Operation(summary = "Get all dishes")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "All dishes returned",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = DishResponseDto.class)))),
+            @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
+    })
+    @GetMapping("/restaurant/{restaurantId}/{categoryId}")
+    public ResponseEntity<List<DishResponseDto>> getAllDishesByRestaurantIdAndCategory(@PathVariable Long restaurantId, @PathVariable Long categoryId,Pageable pageable) {
+        return ResponseEntity.ok(dishHandler.findAllDishesByRestaurantId(restaurantId, categoryId, pageable));
+    }
+
+    @Operation(summary = "Get all dishes")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "All dishes returned",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = DishResponseDto.class)))),
+            @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
+    })
+    @GetMapping("/restaurant/{restaurantId}")
+    public ResponseEntity<List<DishResponseDto>> getAllDishesByRestaurantId(@PathVariable Long restaurantId,Pageable pageable) {
+        return ResponseEntity.ok(dishHandler.findAllDishesByRestaurantId(restaurantId, null, pageable));
     }
 
     @Operation(summary = "Get dish by id")
