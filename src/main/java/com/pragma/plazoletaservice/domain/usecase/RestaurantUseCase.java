@@ -53,6 +53,7 @@ public class RestaurantUseCase implements IRestaurantServicePort {
         return restaurantPersistencePort.saveRestaurant(restaurant);
     }
 
+
     @Override
     public List<Restaurant> findAllRestaurants() {
         return restaurantPersistencePort.findAllRestaurants();

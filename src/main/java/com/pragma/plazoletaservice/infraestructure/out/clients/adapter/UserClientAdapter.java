@@ -7,7 +7,6 @@ import com.pragma.plazoletaservice.infraestructure.out.clients.UserClient;
 import com.pragma.plazoletaservice.infraestructure.out.clients.mapper.IUserDtoMapper;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 public class UserClientAdapter implements IUserClientPort {

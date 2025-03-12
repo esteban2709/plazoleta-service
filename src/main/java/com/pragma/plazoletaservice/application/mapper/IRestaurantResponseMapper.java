@@ -14,6 +14,12 @@ import java.util.List;
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface IRestaurantResponseMapper {
 
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "nit", source = "nit")
+    @Mapping(target = "address", source = "address")
+    @Mapping(target = "phone", source = "phone")
+    @Mapping(target = "urlLogo", source = "urlLogo")
     @Mapping(target = "ownerId", source = "ownerId")
     RestaurantResponseDto toResponse(Restaurant restaurant);
 

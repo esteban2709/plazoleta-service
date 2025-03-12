@@ -17,5 +17,6 @@ public class User {
     private Date birthDate;
     private String password;
     private String email;
+    private Long restaurantId;
     private Role role;
 }

@@ -1,19 +1,19 @@
 package com.pragma.plazoletaservice.domain.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.pragma.plazoletaservice.domain.helpers.OrderStatus;
+import lombok.*;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 public class Order {
 
     private Long id;
-    private List<OrderDetail> detailList;
-    private Long totalPrice;
-    private String status;
+    private List<OrderDish> orderDishList;
+    private User chef;
     private User client;
-    private User employee;
+    private String securityCode;
     private Restaurant restaurant;
+    private OrderStatus orderStatus;
 }

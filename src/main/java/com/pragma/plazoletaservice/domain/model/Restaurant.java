@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class Restaurant {
 
         private Long id;
+
         private String name;
         private Long nit;
         private String address;

@@ -26,6 +26,7 @@ public class WebSecurityConfig {
 
                         .requestMatchers( "/api/v1/restaurants/", "/api/v1/restaurants/**").hasAnyAuthority("ADMIN", "OWNER")
                         .requestMatchers( "/api/v1/dishes/", "/api/v1/dishes/**").hasAnyAuthority("CLIENT", "OWNER")
+                        .requestMatchers( "/api/v1/orders/", "/api/v1/orders/**").hasAnyAuthority("CLIENT", "EMPLOYEE")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

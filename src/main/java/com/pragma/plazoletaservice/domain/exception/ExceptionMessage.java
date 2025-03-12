@@ -10,7 +10,12 @@ public enum ExceptionMessage {
     CATEGORY_NOT_FOUND("No category was found for the requested operation"),
     RESTAURANT_NOT_FOUND("No restaurant was found for the requested operation"),
     DISH_NOT_FOUND("No dish was found for the requested operation"),
-    NOT_RESTAURANT_OWNER("User is not the owner of the restaurant"),;
+    NOT_RESTAURANT_OWNER("User is not the owner of the restaurant"),
+    CLIENT_HAS_ACTIVE_ORDER("Client already has an order in progress. Cannot create a new order."),
+    INVALID_STATE_TRANSITION("Only orders in READY status can be changed to DELIVERED status"),
+    DELIVERED_ORDER_CANNOT_BE_MODIFIED("Delivered orders cannot be modified"),
+    INVALID_SECURITY_CODE("The provided security code is invalid"),
+    ORDER_IS_PREPARING("Sorry, your order is already being prepared and cannot be canceled."),;
 
     private final String message;
 
