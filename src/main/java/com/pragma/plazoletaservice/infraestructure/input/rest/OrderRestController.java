@@ -1,8 +1,9 @@
 package com.pragma.plazoletaservice.infraestructure.input.rest;
 
 import com.pragma.plazoletaservice.application.dto.request.OrderRequestDto;
+import com.pragma.plazoletaservice.application.dto.response.EmployeeAverageTimeDto;
 import com.pragma.plazoletaservice.application.dto.response.OrderResponseDto;
-import com.pragma.plazoletaservice.application.dto.response.RestaurantClientResponseDto;
+import com.pragma.plazoletaservice.application.dto.response.TraceabilityLogResponseDto;
 import com.pragma.plazoletaservice.application.handler.IOrderHandler;
 import com.pragma.plazoletaservice.domain.helpers.OrderStatus;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,5 +48,19 @@ public class OrderRestController {
     @PostMapping("/")
     public ResponseEntity<OrderResponseDto> createOrder(@RequestBody OrderRequestDto orderRequestDto) {
         return ResponseEntity.ok(orderHandler.createOrder(orderRequestDto));
+    }
+
+    @Operation(summary = "Get Orders logs by client id")
+    @ApiResponse(responseCode = "200", description = "Orders found")
+    @GetMapping("/logs-orders-history/{id}")
+    public ResponseEntity<List<TraceabilityLogResponseDto>> getOrdersLogsHistory(@PathVariable Long id ) {
+        return ResponseEntity.ok(orderHandler.getOrdersLogsHistory(id));
+    }
+
+    @Operation(summary = "Get Orders average duration by employee")
+    @ApiResponse(responseCode = "200", description = "Orders found")
+    @GetMapping("/logs-order-durations")
+    public ResponseEntity<List<EmployeeAverageTimeDto>> getEmployeeOrderAverageDurations() {
+        return ResponseEntity.ok(orderHandler.getEmployeeOrderAverageDurations());
     }
 }

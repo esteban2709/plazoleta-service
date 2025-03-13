@@ -15,7 +15,8 @@ public enum ExceptionMessage {
     INVALID_STATE_TRANSITION("Only orders in READY status can be changed to DELIVERED status"),
     DELIVERED_ORDER_CANNOT_BE_MODIFIED("Delivered orders cannot be modified"),
     INVALID_SECURITY_CODE("The provided security code is invalid"),
-    ORDER_IS_PREPARING("Sorry, your order is already being prepared and cannot be canceled."),;
+    ORDER_IS_PREPARING("Sorry, your order is already being prepared and cannot be canceled."),
+    CLIENT_NOT_PLACED_ORDER("The client did not place the order"),;
 
     private final String message;
 

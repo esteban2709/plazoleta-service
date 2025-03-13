@@ -71,9 +71,6 @@ public class OrderJpaAdapter implements IOrderPersistencePort {
                         OrderStatus.PREPARING.toString(),
                         OrderStatus.READY.toString())
         );
-        if (orderEntities.isEmpty()) {
-           throw new NoDataFoundException();
-        }
         return orderEntityMapper.toOrderList(orderEntities);
     }
 

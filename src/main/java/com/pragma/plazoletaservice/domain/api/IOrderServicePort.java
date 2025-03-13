@@ -1,7 +1,9 @@
 package com.pragma.plazoletaservice.domain.api;
 
+import com.pragma.plazoletaservice.application.dto.response.EmployeeAverageTimeDto;
 import com.pragma.plazoletaservice.domain.helpers.OrderStatus;
 import com.pragma.plazoletaservice.domain.model.Order;
+import com.pragma.plazoletaservice.domain.model.TraceabilityLog;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -26,4 +28,8 @@ public interface IOrderServicePort {
     Order setOrderDishes(Order order);
 
     Order updateOrderStatus(Long orderId, OrderStatus status, String securityCode);
+
+    List<TraceabilityLog> getOrdersLogsHistory(Long id);
+
+    List<EmployeeAverageTimeDto> getEmployeeOrderAverageDurations();
 }

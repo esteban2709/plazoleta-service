@@ -8,10 +8,13 @@ import com.pragma.plazoletaservice.domain.usecase.DishUseCase;
 import com.pragma.plazoletaservice.domain.usecase.OrderUseCase;
 import com.pragma.plazoletaservice.domain.usecase.RestaurantUseCase;
 import com.pragma.plazoletaservice.infraestructure.out.clients.MessageClient;
+import com.pragma.plazoletaservice.infraestructure.out.clients.TraceabilityLogClient;
 import com.pragma.plazoletaservice.infraestructure.out.clients.adapter.MessagingClientAdapter;
+import com.pragma.plazoletaservice.infraestructure.out.clients.adapter.TraceabilityLogClientAdapter;
 import com.pragma.plazoletaservice.infraestructure.out.clients.adapter.UserClientAdapter;
 import com.pragma.plazoletaservice.infraestructure.out.clients.UserClient;
 import com.pragma.plazoletaservice.infraestructure.out.clients.mapper.IMessageDtoMapper;
+import com.pragma.plazoletaservice.infraestructure.out.clients.mapper.ITraceabilityLogDtoMapper;
 import com.pragma.plazoletaservice.infraestructure.out.clients.mapper.IUserDtoMapper;
 import com.pragma.plazoletaservice.infraestructure.out.jpa.adapter.*;
 import com.pragma.plazoletaservice.infraestructure.out.jpa.mapper.*;
@@ -48,6 +51,10 @@ public class BeanConfiguration {
     private final IOrderDishRepository orderDishRepository;
     private final IOrderDishEntityMapper orderDishEntityMapper;
 
+    //TraceabilityLog
+    private final TraceabilityLogClient traceabilityLogClient;
+    private final ITraceabilityLogDtoMapper traceabilityLogDtoMapper;
+
     @Bean
     public IOrderDishPersistencePort orderDishPersistencePort() {
         return new OrderDishJpaAdapter(orderDishRepository, orderDishEntityMapper);
@@ -61,7 +68,12 @@ public class BeanConfiguration {
     @Bean
     public IOrderServicePort orderServicePort() {
         return new OrderUseCase(orderPersistencePort(), orderDishPersistencePort(), userClientPort(),
-                tokenUtilsPort(), messagingClientPort());
+                tokenUtilsPort(), messagingClientPort(), traceabilityLogClientPort());
+    }
+
+    @Bean
+    public ITraceabilityLogClientPort traceabilityLogClientPort() {
+        return new TraceabilityLogClientAdapter(traceabilityLogClient, traceabilityLogDtoMapper);
     }
 
     @Bean

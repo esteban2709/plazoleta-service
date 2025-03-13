@@ -1,16 +1,15 @@
 package com.pragma.plazoletaservice.domain.usecase;
 
+import com.pragma.plazoletaservice.application.dto.response.EmployeeAverageTimeDto;
 import com.pragma.plazoletaservice.domain.api.IOrderServicePort;
 import com.pragma.plazoletaservice.domain.exception.CustomException;
 import com.pragma.plazoletaservice.domain.exception.ExceptionMessage;
 import com.pragma.plazoletaservice.domain.helpers.Constants;
 import com.pragma.plazoletaservice.domain.helpers.OrderStatus;
-import com.pragma.plazoletaservice.domain.model.Message;
-import com.pragma.plazoletaservice.domain.model.Order;
-import com.pragma.plazoletaservice.domain.model.OrderDish;
-import com.pragma.plazoletaservice.domain.model.User;
+import com.pragma.plazoletaservice.domain.model.*;
 import com.pragma.plazoletaservice.domain.spi.*;
 import com.pragma.plazoletaservice.infraestructure.exception.NoDataFoundException;
+import com.pragma.plazoletaservice.infraestructure.out.clients.dto.TraceabilityLogDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 
@@ -25,15 +24,17 @@ public class OrderUseCase implements IOrderServicePort {
     private final IUserClientPort userClientPort;
     private final ITokenUtilsPort tokenUtilsPort;
     private final IMessagingClientPort messagingClientPort;
+    private final ITraceabilityLogClientPort traceabilityLogClientPort;
 
 
     public OrderUseCase(IOrderPersistencePort orderPersistencePort, IOrderDishPersistencePort orderDishPersistencePort,
-                        IUserClientPort userClientPort, ITokenUtilsPort tokenUtilsPort, IMessagingClientPort messagingClientPort) {
+                        IUserClientPort userClientPort, ITokenUtilsPort tokenUtilsPort, IMessagingClientPort messagingClientPort, ITraceabilityLogClientPort traceabilityLogClientPort) {
         this.orderPersistencePort = orderPersistencePort;
         this.orderDishPersistencePort = orderDishPersistencePort;
         this.userClientPort = userClientPort;
         this.tokenUtilsPort = tokenUtilsPort;
         this.messagingClientPort = messagingClientPort;
+        this.traceabilityLogClientPort = traceabilityLogClientPort;
     }
 
     @Override
@@ -47,6 +48,11 @@ public class OrderUseCase implements IOrderServicePort {
         List<OrderDish> orderDishList = order.getOrderDishList();
         orderDishList.forEach(orderDish -> orderDish.setOrder(orderCreated));
         orderCreated.setOrderDishList(orderDishPersistencePort.saverOrderDish(orderDishList));
+
+        //crear el log de trazabilidad
+        User client = userClientPort.getUserById(orderCreated.getClient().getId());
+        saveTraceabilityLog(orderCreated.getOrderStatus(), orderCreated, client, new User());
+
         return orderCreated;
     }
 
@@ -84,14 +90,43 @@ public class OrderUseCase implements IOrderServicePort {
         isInvalidStateTransition(status, securityCode, currentOrder);
 
         // Actualizar el estado
-        Order order = setOrderDishes(orderPersistencePort.updateOrderStatus(orderId, status));
+        Order updatedOrder = setOrderDishes(orderPersistencePort.updateOrderStatus(orderId, status));
+        User client = userClientPort.getUserById(updatedOrder.getClient().getId());
+        User chef = userClientPort.getUserById(updatedOrder.getChef().getId());
+
 
         if (status == OrderStatus.READY) {
             // Generar código de seguridad para pedidos listos
-            sendSecurityCode(order);
+            sendSecurityCode(updatedOrder, client);
         }
 
-        return order;
+        // Guardar el log de trazabilidad
+        saveTraceabilityLog(status, currentOrder, client, chef);
+        return updatedOrder;
+    }
+
+    @Override
+    public List<TraceabilityLog> getOrdersLogsHistory(Long id) {
+        Long currentUserId = tokenUtilsPort.getUserId();
+        Order order = orderPersistencePort.findOrderById(id);
+        if (order == null) {
+            throw new NoDataFoundException();
+        }
+        if (!currentUserId.equals(order.getClient().getId())) {
+            throw new CustomException(ExceptionMessage.CLIENT_NOT_PLACED_ORDER.getMessage());
+        }
+        return traceabilityLogClientPort.getLogsByOrderId(id);
+    }
+
+    @Override
+    public List<EmployeeAverageTimeDto> getEmployeeOrderAverageDurations() {
+        return traceabilityLogClientPort.getEmployeeOrderAverageDurations();
+    }
+
+    private void saveTraceabilityLog(OrderStatus status, Order currentOrder, User client, User chef) {
+        TraceabilityLogDto traceabilityLog = new TraceabilityLogDto(currentOrder.getId(), currentOrder.getClient().getId(), client.getEmail(),
+                currentOrder.getOrderStatus().toString(), status.toString(), currentOrder.getChef().getId(), chef.getEmail());
+        traceabilityLogClientPort.saveLog(traceabilityLog);
     }
 
     private static void isInvalidStateTransition(OrderStatus status, String securityCode, Order currentOrder) {
@@ -116,8 +151,7 @@ public class OrderUseCase implements IOrderServicePort {
         }
     }
 
-    private void sendSecurityCode(Order order) {
-        User user = userClientPort.getUserById(order.getClient().getId());
+    private void sendSecurityCode(Order order, User user ) {
         String randomCode = generateSecurityCode();
         order.setSecurityCode(randomCode);
         orderPersistencePort.updateOrder(order);

@@ -1,7 +1,9 @@
 package com.pragma.plazoletaservice.application.handler.impl;
 
 import com.pragma.plazoletaservice.application.dto.request.OrderRequestDto;
+import com.pragma.plazoletaservice.application.dto.response.EmployeeAverageTimeDto;
 import com.pragma.plazoletaservice.application.dto.response.OrderResponseDto;
+import com.pragma.plazoletaservice.application.dto.response.TraceabilityLogResponseDto;
 import com.pragma.plazoletaservice.application.handler.IOrderHandler;
 import com.pragma.plazoletaservice.application.mapper.IOrderDishRequestMapper;
 import com.pragma.plazoletaservice.application.mapper.IOrderRequestMapper;
@@ -79,5 +81,15 @@ public class OrderHandler implements IOrderHandler {
     @Override
     public OrderResponseDto assignEmployeeToOrder(Long id, Long orderId) {
         return orderResponseMapper.toResponse(orderServicePort.assignEmployeeToOrder(id, orderId));
+    }
+
+    @Override
+    public List<TraceabilityLogResponseDto> getOrdersLogsHistory(Long id) {
+        return orderResponseMapper.toTraceabilityLogDtoList(orderServicePort.getOrdersLogsHistory(id));
+    }
+
+    @Override
+    public List<EmployeeAverageTimeDto> getEmployeeOrderAverageDurations() {
+        return orderServicePort.getEmployeeOrderAverageDurations();
     }
 }

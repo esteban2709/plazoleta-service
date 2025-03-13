@@ -12,7 +12,6 @@ import org.mapstruct.ReportingPolicy;
 public interface IOrderRequestMapper {
 
     @Mapping(target = "restaurant.id", source = "restaurantId")
-    @Mapping(target = "chef.id", source = "chefId")
     @Mapping(target = "client.id", source = "clientId")
     Order toOrder(OrderRequestDto orderRequestDto);
 

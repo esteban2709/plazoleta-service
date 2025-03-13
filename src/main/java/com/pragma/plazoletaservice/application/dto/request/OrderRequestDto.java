@@ -11,6 +11,5 @@ public class OrderRequestDto {
 
     private List<OrderDishRequestDto> orderDishList;
     private Long clientId;
-    private Long chefId;
     private Long restaurantId;
 }
