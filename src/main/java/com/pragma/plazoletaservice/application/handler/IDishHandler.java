@@ -20,5 +20,7 @@ public interface IDishHandler {
 
     List<DishResponseDto> findAllDishes();
 
-    List<DishResponseDto> findAllDishesByRestaurantId(Long restaurantId, Long categoryId, Pageable pageable);
+    List<DishResponseDto> findAllDishesByRestaurantIdAndCategoryId(Long restaurantId, Long categoryId, Pageable pageable);
+
+    List<DishResponseDto> findAllDishesByRestaurantId(Long restaurantId, Pageable pageable);
 }

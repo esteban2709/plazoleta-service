@@ -47,7 +47,7 @@ public class DishRestController {
         return ResponseEntity.ok(dishHandler.findAllDishes());
     }
 
-    @Operation(summary = "Get all dishes")
+    @Operation(summary = "Get all dishes By Restaurant Id And Category")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "All dishes returned",
                     content = @Content(mediaType = "application/json",
@@ -56,10 +56,10 @@ public class DishRestController {
     })
     @GetMapping("/restaurant/{restaurantId}/{categoryId}")
     public ResponseEntity<List<DishResponseDto>> getAllDishesByRestaurantIdAndCategory(@PathVariable Long restaurantId, @PathVariable Long categoryId,Pageable pageable) {
-        return ResponseEntity.ok(dishHandler.findAllDishesByRestaurantId(restaurantId, categoryId, pageable));
+        return ResponseEntity.ok(dishHandler.findAllDishesByRestaurantIdAndCategoryId(restaurantId, categoryId, pageable));
     }
 
-    @Operation(summary = "Get all dishes")
+    @Operation(summary = "Get all dishes by restaurant id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "All dishes returned",
                     content = @Content(mediaType = "application/json",
@@ -68,7 +68,7 @@ public class DishRestController {
     })
     @GetMapping("/restaurant/{restaurantId}")
     public ResponseEntity<List<DishResponseDto>> getAllDishesByRestaurantId(@PathVariable Long restaurantId,Pageable pageable) {
-        return ResponseEntity.ok(dishHandler.findAllDishesByRestaurantId(restaurantId, null, pageable));
+        return ResponseEntity.ok(dishHandler.findAllDishesByRestaurantId(restaurantId, pageable));
     }
 
     @Operation(summary = "Get dish by id")
@@ -78,8 +78,8 @@ public class DishRestController {
                             schema = @Schema(implementation = DishResponseDto.class))),
             @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
     })
-    @PostMapping("/{id}")
-    public ResponseEntity<DishResponseDto> findDishById(@RequestBody Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<DishResponseDto> findDishById(@PathVariable Long id) {
         return ResponseEntity.ok(dishHandler.findDishById(id));
     }
 

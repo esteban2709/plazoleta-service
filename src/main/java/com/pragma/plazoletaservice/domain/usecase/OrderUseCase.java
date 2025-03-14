@@ -67,16 +67,6 @@ public class OrderUseCase implements IOrderServicePort {
     }
 
     @Override
-    public void deleteOrder(Long id) {
-        orderPersistencePort.deleteOrder(id);
-    }
-
-    @Override
-    public List<Order> findAllOrders() {
-        return orderPersistencePort.findAllOrders();
-    }
-
-    @Override
     public List<Order> findAllOrdersByUserId(Long userId) {
         return orderPersistencePort.findAllOrdersByUserId(userId);
     }

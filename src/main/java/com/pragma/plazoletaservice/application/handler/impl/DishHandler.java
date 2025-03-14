@@ -55,7 +55,12 @@ public class DishHandler implements IDishHandler {
     }
 
     @Override
-    public List<DishResponseDto> findAllDishesByRestaurantId(Long restaurantId, Long categoryId, Pageable pageable) {
+    public List<DishResponseDto> findAllDishesByRestaurantId(Long restaurantId, Pageable pageable) {
+        return dishResponseMapper.toResponseList(dishServicePort.findAllDishesByRestaurantId(restaurantId, null, pageable));
+    }
+
+    @Override
+    public List<DishResponseDto> findAllDishesByRestaurantIdAndCategoryId(Long restaurantId, Long categoryId, Pageable pageable) {
         return dishResponseMapper.toResponseList(dishServicePort.findAllDishesByRestaurantId(restaurantId, categoryId, pageable));
     }
 }

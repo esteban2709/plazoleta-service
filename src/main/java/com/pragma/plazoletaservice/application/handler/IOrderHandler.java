@@ -17,11 +17,7 @@ public interface IOrderHandler {
 
     OrderResponseDto updateOrder(Long id, OrderRequestDto orderRequestDto);
 
-    void deleteOrder(Long id);
-
     OrderResponseDto updateOrderStatus(Long id, OrderStatus status, String securityCode);
-
-    List<OrderResponseDto> findAllOrders();
 
     List<OrderResponseDto> findAllOrdersByUserId(Long userId);
 

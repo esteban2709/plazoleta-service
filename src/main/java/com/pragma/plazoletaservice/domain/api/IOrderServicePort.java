@@ -15,10 +15,6 @@ public interface IOrderServicePort {
 
     Order updateOrder(Order order);
 
-    void deleteOrder(Long id);
-
-    List<Order> findAllOrders();
-
     List<Order> findAllOrdersByUserId(Long userId);
 
     List<Order> getOrdersByState(OrderStatus status, Pageable pageable);

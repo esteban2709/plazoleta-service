@@ -10,8 +10,6 @@ import com.pragma.plazoletaservice.domain.spi.IDishPersistencePort;
 import com.pragma.plazoletaservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.plazoletaservice.domain.spi.ITokenUtilsPort;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 import java.util.Objects;

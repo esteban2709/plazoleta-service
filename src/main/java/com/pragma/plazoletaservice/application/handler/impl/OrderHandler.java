@@ -53,18 +53,8 @@ public class OrderHandler implements IOrderHandler {
     }
 
     @Override
-    public void deleteOrder(Long id) {
-        orderServicePort.deleteOrder(id);
-    }
-
-    @Override
     public OrderResponseDto updateOrderStatus(Long id, OrderStatus status, String securityCode) {
         return orderResponseMapper.toResponse(orderServicePort.updateOrderStatus(id, status, securityCode));
-    }
-
-    @Override
-    public List<OrderResponseDto> findAllOrders() {
-        return orderResponseMapper.toResponseList(orderServicePort.findAllOrders());
     }
 
     @Override
